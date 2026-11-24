@@ -14,6 +14,8 @@
     banner: document.getElementById('banner'),
     list: document.getElementById('note-list'),
     emptyList: document.getElementById('empty-list'),
+    search: document.getElementById('search'),
+    noMatches: document.getElementById('no-matches'),
     placeholder: document.getElementById('placeholder'),
     editor: document.getElementById('editor'),
     title: document.getElementById('note-title'),
@@ -107,9 +109,23 @@
 
   // ---------- Rendering ----------
 
+  // True if the note's title or body contains the search text (ignoring case).
+  function matchesSearch(note, query) {
+    return note.title.toLowerCase().indexOf(query) !== -1 ||
+      note.body.toLowerCase().indexOf(query) !== -1;
+  }
+
   function renderList() {
     var visible = notes.filter(hasContent);
-    var sorted = visible.sort(function (a, b) {
+    var query = el.search.value.trim().toLowerCase();
+    var matching = query === '' ? visible : visible.filter(function (note) {
+      return matchesSearch(note, query);
+    });
+    // The open note always stays in the list, even if it doesn't match.
+    var shown = visible.filter(function (note) {
+      return note.id === currentId || matching.indexOf(note) !== -1;
+    });
+    var sorted = shown.sort(function (a, b) {
       return (b.updatedAt || '').localeCompare(a.updatedAt || '');
     });
 
@@ -136,6 +152,7 @@
     });
 
     el.emptyList.hidden = visible.length > 0;
+    el.noMatches.hidden = !(visible.length > 0 && matching.length === 0);
   }
 
   function renderEditor() {
@@ -253,6 +270,17 @@
   el.editor.addEventListener('submit', function (e) {
     e.preventDefault();
     commitEdits();
+  });
+
+  el.search.addEventListener('input', renderList);
+
+  // Esc clears the search box and shows all notes again.
+  el.search.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape' || e.isComposing) return;
+    e.preventDefault();
+    if (el.search.value === '') return;
+    el.search.value = '';
+    renderList();
   });
 
   el.title.addEventListener('input', scheduleAutosave);
