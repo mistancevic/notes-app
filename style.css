@@ -157,8 +157,8 @@ body {
 .note-title { font-size: 1.25rem; font-weight: 600; }
 .note-body { flex: 1; min-height: 12rem; resize: vertical; }
 
-.editor-actions { display: flex; align-items: center; gap: 0.5rem; }
-.status { margin-right: auto; font-size: 0.875rem; color: var(--muted); }
+.editor-actions { display: flex; align-items: center; justify-content: flex-end; gap: 0.75rem; }
+.status { font-size: 0.875rem; color: var(--muted); white-space: nowrap; }
 
 /* Phones: stack list above editor */
 @media (max-width: 640px) {

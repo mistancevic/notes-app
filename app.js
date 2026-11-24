@@ -91,9 +91,18 @@
     return null;
   }
 
-  function formatTime(iso) {
+  // "Saved at 4:16 PM" today; older saves also show the date ("Saved Nov 20 at 4:16 PM").
+  function savedText(iso) {
     var d = new Date(iso);
-    return isNaN(d) ? '' : d.toLocaleString();
+    if (isNaN(d)) return 'Saved';
+    var time = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    if (d.toDateString() === new Date().toDateString()) return 'Saved at ' + time;
+    var date = d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    return 'Saved ' + date + ' at ' + time;
+  }
+
+  function showSavedStatus(note) {
+    el.status.textContent = isEmptyNote(note) ? '' : savedText(note.updatedAt);
   }
 
   // ---------- Rendering ----------
@@ -141,7 +150,7 @@
     el.placeholder.hidden = true;
     el.title.value = note.title;
     el.body.value = note.body;
-    el.status.textContent = isEmptyNote(note) ? '' : 'Saved ' + formatTime(note.updatedAt);
+    showSavedStatus(note);
   }
 
   // ---------- Actions ----------
@@ -151,7 +160,11 @@
     autosaveTimer = null;
     var note = findNote(currentId);
     if (!note) return;
-    if (note.title === el.title.value && note.body === el.body.value) return;
+    // Nothing changed (e.g. typed then undid it): clear "Saving…" back to the saved time.
+    if (note.title === el.title.value && note.body === el.body.value) {
+      showSavedStatus(note);
+      return;
+    }
 
     note.title = el.title.value;
     note.body = el.body.value;
@@ -160,7 +173,7 @@
       saveNotes(); // drops it from storage if it was saved before
       el.status.textContent = '';
     } else if (saveNotes()) {
-      el.status.textContent = 'Saved ' + formatTime(note.updatedAt);
+      showSavedStatus(note);
     } else {
       el.status.textContent = 'Not saved';
     }
@@ -222,7 +235,7 @@
   }
 
   function scheduleAutosave() {
-    el.status.textContent = 'Editing…';
+    el.status.textContent = 'Saving…';
     clearTimeout(autosaveTimer);
     autosaveTimer = setTimeout(commitEdits, AUTOSAVE_MS);
   }
