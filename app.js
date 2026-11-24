@@ -121,7 +121,11 @@
     var matching = query === '' ? visible : visible.filter(function (note) {
       return matchesSearch(note, query);
     });
-    var sorted = matching.sort(function (a, b) {
+    // The open note always stays in the list, even if it doesn't match.
+    var shown = visible.filter(function (note) {
+      return note.id === currentId || matching.indexOf(note) !== -1;
+    });
+    var sorted = shown.sort(function (a, b) {
       return (b.updatedAt || '').localeCompare(a.updatedAt || '');
     });
 
