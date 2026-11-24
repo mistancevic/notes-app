@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notes</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="app-header">
+    <h1>Notes</h1>
+    <button type="button" id="new-note" class="btn btn-primary">New note</button>
+  </header>
+
+  <div id="banner" class="banner" role="alert" hidden></div>
+
+  <div class="layout">
+    <aside class="sidebar" aria-label="Your notes">
+      <ul id="note-list" class="note-list"></ul>
+      <p id="empty-list" class="empty" hidden>No notes yet. Click “New note” to start.</p>
+    </aside>
+
+    <main class="editor-pane">
+      <p id="placeholder" class="empty">Select a note or create a new one.</p>
+
+      <form id="editor" class="editor" hidden>
+        <label for="note-title" class="visually-hidden">Title</label>
+        <input id="note-title" class="note-title" type="text" placeholder="Title" autocomplete="off">
+
+        <label for="note-body" class="visually-hidden">Body</label>
+        <textarea id="note-body" class="note-body" placeholder="Write your note…"></textarea>
+
+        <div class="editor-actions">
+          <span id="status" class="status" aria-live="polite"></span>
+          <button type="button" id="delete-note" class="btn btn-danger">Delete</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</body>
+</html>
