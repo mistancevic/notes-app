@@ -15,3 +15,6 @@
 - Before changing any code, describe in plain words what will change and what the user will see. Wait for my approval before editing.
 - store notes under the key notes-app:notes only
 - never store passwords, keys or tokens
+- empty notes are never saved or listed
+- Enter in the title field moves the cursor to the body
+- the open note always stays in the list, even when it doesn't match the search
