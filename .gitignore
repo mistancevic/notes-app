@@ -159,10 +159,15 @@ vite.config.ts.timestamp-*
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
+._*
 
 # Editor settings
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
 # Claude Code local settings
 .claude/settings.local.json
