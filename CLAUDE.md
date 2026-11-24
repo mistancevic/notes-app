@@ -12,5 +12,6 @@
 - keep everything in index.html, style.css and app.js
 
 ## General rules
+- Before changing any code, describe in plain words what will change and what the user will see. Wait for my approval before editing.
 - store notes under the key notes-app:notes only
 - never store passwords, keys or tokens
